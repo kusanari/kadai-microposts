@@ -12,7 +12,7 @@
 */
 
 Route::get('/', 'MicropostsController@index');
-
+// ユーザ登録
 Route::get('signup', 'Auth\RegisterController@showRegistrationForm')->name('signup.get');
 Route::post('signup', 'Auth\RegisterController@register')->name('signup.post');
 // 認証
@@ -33,6 +33,12 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::resource('users', 'UsersController', ['only' => ['index', 'show']]);
+
+     // 追加
+    Route::group(['prefix' => 'microposts/{id}'], function () {
+        Route::post('favorite', 'FavoritesController@store')->name('favorites.favorite');
+        Route::delete('unfavorite', 'FavoritesController@destroy')->name('favorites.unfavorite');
+    });
 
     Route::resource('microposts', 'MicropostsController', ['only' => ['store', 'destroy']]);
 });
